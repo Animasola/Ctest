@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Contacts{% endblock %}
+{% block body %}
+<div class="login">
+  <p>{% if user.is_authenticated %}
+      <a href="{% url logout %}">Logout</a>
+{% else %}
+<a href="{% url login %}">Login</a>{% endif %}
+</div>
+
+<div class="my-data">
+  <div class="left-side">
+    <p>Name: {{ contacts.first_name }}</p>
+    <p>Last name: {{ contacts.last_name }}</p>
+    <p>Date of Birth: {{ contacts.birth_date }}</p>
+  </div>
+  <div class="right-side">
+    <p>Contacts</p>
+    <p>Email: {{ contacts.email }}</p>
+    <p>Jabber: {{ contacts.jabber }}</p>
+    <p>Skype: {{ contacts.skype }}</p>
+    <p>Other contacts:<br>
+    <div class="multiline">
+        {{ contacts.extra_contacts }}
+    </div>
+    </p>
+<p>
+    Bio:<br>
+    <div class="multiline">
+        {{ contacts.bio }}
+    </div>
+</p>
+    </div>
+</div>
+{% endblock %}

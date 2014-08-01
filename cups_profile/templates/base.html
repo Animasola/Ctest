@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+    {% block extra_css %}
+    {% endblock %}
+
+    {% block extra_js %}
+    {% endblock %}
+  </head>
+  <body>
+  <h1 class="page-header">42 Coffee Cups Test Assignment</h1>
+  {% block body %}
+  {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,96 @@
+.my_info{
+    float:left;
+}
+
+.left-side{
+    float:left;
+    padding-left:20px;
+}
+
+.right-side{
+    float:left;
+    padding-left:50px;
+}
+
+.multiline{
+    width:400px;
+    height:150px;
+    overflow:auto;
+}
+
+.clr{
+    clear:both;
+}
+
+#reqlog{
+width:70%;
+float:left;
+padding-left:10px;
+clear:both;
+}
+
+.controls{
+    padding-left:10px;
+    clear:both;
+}
+
+form.login {
+    float:left;
+}
+
+
+.form_left{
+    float:left;
+}
+
+.form_right{
+    float:left;
+}
+
+.fieldWrapper{
+    padding:5px;
+}
+
+#idname, #idsurname, #idbirth_date, #idmy_photo{
+float:right;
+clear:both;
+padding-right:40px;
+}
+
+#idemail, #idjabber, #idskype, #idother_cont, #idbio{
+float:right;
+clear:both;
+}
+
+
+#img_prev{
+float:left;
+max-width:480px;
+border: solid black 1px;
+}
+
+#my_photo_prev{
+max-width:480px;
+border: solid black 1px;
+}
+
+.login{
+    float:right;
+    padding-right:500px;
+    clear:both;
+}
+
+.contact-me{
+    float:left;
+    padding-left:50px;
+    background-color:#FFFFE0;
+    border: solid  #F0E68C 3px;
+    margin:5px;
+}
+form p{
+    float:right;
+    clear:both;
+    padding-right:10px;
+}
+
+
