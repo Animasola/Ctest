@@ -1,5 +1,9 @@
 #-*- coding:utf-8 -*-
 from django.db import models
+from django.conf import settings
+
+import os
+from PIL import Image
 
 
 class Contact(models.Model):
@@ -12,6 +16,15 @@ class Contact(models.Model):
     jabber = models.CharField(max_length=50)
     skype = models.CharField(max_length=50)
     extra_contacts = models.TextField(null=True, blank=True)
+    photo = models.ImageField(upload_to='img/', blank=True, null=True)
+
+    def save(self, photo_size=(380, 500)):
+        super(Contact, self).save()
+        if self.photo:
+            filename = os.path.split(settings.DEPLOY_DIR)[0] + self.photo.url
+            image = Image.open(filename)
+            image.thumbnail(photo_size, Image.ANTIALIAS)
+            image.save(filename)
 
     def __unicode__(self):
         return "%s %s" % (self.last_name, self.first_name)
