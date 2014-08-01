@@ -15,3 +15,14 @@ class Contact(models.Model):
 
     def __unicode__(self):
         return "%s %s" % (self.last_name, self.first_name)
+
+
+class LoggedRequest(models.Model):
+    url = models.CharField(max_length=255)
+    ip = models.CharField(max_length=20)
+    request_type = models.CharField(max_length=4)
+    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    def __unicode__(self):
+        return "Request: %s From: %s At: %s" % (
+            self.request_type, self.ip, self.timestamp)

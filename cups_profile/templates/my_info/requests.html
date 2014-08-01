@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} Request's Log {% endblock %}
+
+{% block body %}
+
+<table class="requests-table">
+    <thead>
+        <th>Type</th>
+        <th>Requested Url</th>
+        <th>From IP</th>
+        <th>Timestamp</th>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        <tr>
+            <td>{{ request.request_type }}</td>
+            <td>{{ request.url }}</td>
+            <td>{{ request.ip }}</td>
+            <td>{{ request.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% block panel %}
+    <a href="{% url home %}">Home</a>
+{% endblock %}

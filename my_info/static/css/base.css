@@ -1,3 +1,8 @@
+body {
+    margin: 0px;
+    padding:15px;
+}
+
 .my_info{
     float:left;
 }
@@ -51,29 +56,6 @@ form.login {
     padding:5px;
 }
 
-#idname, #idsurname, #idbirth_date, #idmy_photo{
-float:right;
-clear:both;
-padding-right:40px;
-}
-
-#idemail, #idjabber, #idskype, #idother_cont, #idbio{
-float:right;
-clear:both;
-}
-
-
-#img_prev{
-float:left;
-max-width:480px;
-border: solid black 1px;
-}
-
-#my_photo_prev{
-max-width:480px;
-border: solid black 1px;
-}
-
 .login{
     float:right;
     padding-right:500px;
@@ -93,4 +75,15 @@ form p{
     padding-right:10px;
 }
 
-
+.requests-table {
+    width:95%;
+    border-collapse: collapse;
+}
+.requests-table, .requests-table th, .requests-table td {
+    border-collapse: collapse;
+    text-align: left;
+    padding: 1px;
+}
+.requests-table tr {
+    height: 30px;
+}
