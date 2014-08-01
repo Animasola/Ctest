@@ -4,16 +4,20 @@
 {% block body %}
 <div class="login">
   <p>{% if user.is_authenticated %}
-      <a href="{% url logout %}">Logout</a>
+      <a href="{% url logout %}">Logout</a> <a href="{% url edit_contacts %}">Edit</a>
 {% else %}
 <a href="{% url login %}">Login</a>{% endif %}
 </div>
+
 
 <div class="my-data">
   <div class="left-side">
     <p>Name: {{ contacts.first_name }}</p>
     <p>Last name: {{ contacts.last_name }}</p>
     <p>Date of Birth: {{ contacts.birth_date }}</p>
+    <p>Photo:<br>
+      <img id="my_photo_prev" src="{% if contacts.photo %}{{ MEDIA_URL }}{{ contacts.photo }}{% else %}http://placehold.it/380x500{% endif %}">
+    </p>
   </div>
   <div class="right-side">
     <p>Contacts</p>

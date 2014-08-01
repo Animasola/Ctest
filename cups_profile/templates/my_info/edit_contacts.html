@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Contacts Edit Page{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/edit_contacts_page.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<form id="editmyinfo" enctype="multipart/form-data" action="#" method="POST">
+  {% csrf_token %}
+  <div class="form_left">
+    <div class="fieldWrapper" id="idname">
+      {{ form.first_name.label_tag }} {{ form.first_name }}
+      {{ form.first_name.errors }}
+    </div>
+    <div class="fieldWrapper" id="idsurname">
+      {{ form.last_name.label_tag }} {{ form.last_name }}
+      {{ form.last_name.errors }}
+    </div>
+    <div class="fieldWrapper" id="idbirth_date">
+      {{ form.birth_date.label_tag }} {{ form.birth_date }}
+      {{ form.birth_date.errors }}
+    </div>
+    <div class="fieldWrapper" id="idmy_photo">
+      {{ form.photo.label_tag }}
+      {{ form.photo }}
+      {{ form.photo.errors }}
+    </div>
+    <div class="clr"></div>
+    <div id="img_container"><img id="img_prev" src="{% if photo %}{{MEDIA_URL}}{{ photo }}{% else %}http://placehold.it/380x500{% endif %}" alt="Image preview" /></div>
+  </div>
+  <div class="form_right">
+    <div class="fieldwrapper" id="idemail">
+      {{ form.email.label_tag }} {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+    <div class="fieldWrapper" id="idjabber">
+      {{ form.jabber.label_tag }} {{ form.jabber }}
+      {{ form.jabber.errors }}
+    </div>
+    <div class="fieldWrapper" id="idskype">
+      {{ form.skype.label_tag }} {{ form.skype }}
+      {{ form.skype.errors }}
+    </div>
+    <div class="fieldWrapper" id="idother_cont">
+      {{ form.extra_contacts.label_tag }}<br/> {{ form.extra_contacts }}
+      {{ form.extra_contacts.errors }}
+    </div>
+    <div class="fieldWrappe" id="idbio">
+      {{ form.bio.label_tag }}<br/> {{ form.bio }}
+      {{ form.bio.errors }}
+    </div>
+  </div>
+
+  <div class="clr"></div>
+    <div id="error_message">Fill the form and press Submit button</div>
+    <p id="form_butts"><button id="savebutton" type="submit">Submit</button> <a href="{% url home %}">cancel</a></p>
+</form>
+
+{% endblock %}
+
+{% block panel %}
+    <a href="{% url logged_requests_page %}">Requests</a>
+{% endblock %}

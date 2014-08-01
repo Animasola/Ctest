@@ -1,6 +1,7 @@
 body {
-    margin: 0px;
-    padding:15px;
+    margin: 5px;
+    padding-bottom:100px;
+    padding-left: 15px;
 }
 
 .my_info{
@@ -50,10 +51,36 @@ form.login {
 
 .form_right{
     float:left;
+    padding-left: 5%;
 }
 
 .fieldWrapper{
     padding:5px;
+}
+
+#idname, #idsurname, #idbirth_date, #idmy_photo{
+float:right;
+clear:both;
+padding-right:40px;
+}
+
+#idemail, #idjabber, #idskype, #idother_cont, #idbio{
+float:right;
+clear:both;
+}
+
+textarea {
+    float: right;
+}
+
+#img_prev{
+float:left;
+max-width:480px;
+border: solid black 1px;
+}
+
+#my_photo_prev{
+border: solid black 1px;
 }
 
 .login{
@@ -86,4 +113,8 @@ form p{
 }
 .requests-table tr {
     height: 30px;
+}
+
+#form_butts {
+    float:left;
 }
