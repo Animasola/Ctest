@@ -1,7 +1,5 @@
 #-*- coding:utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models import signals
 
 
 class Contact(models.Model):
@@ -17,11 +15,3 @@ class Contact(models.Model):
 
     def __unicode__(self):
         return "%s %s" % (self.last_name, self.first_name)
-
-
-# for getBarista
-def create_superuser(app, created_models, verbosity, **kwargs):
-    if User.objects.all().count() == 0:
-        User.objects.create_superuser("admin", "admin@mail.com", "admin")
-
-signals.post_syncdb.connect(create_superuser, dispatch_uid='create_superuser')
