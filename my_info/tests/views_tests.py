@@ -2,6 +2,8 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
+import json
+
 from StringIO import StringIO
 from datetime import datetime
 
@@ -132,3 +134,45 @@ class ContactsEditPageTestCase(TestCase):
                     response,
                     value[0],
                     status_code=200)
+
+    def test_ajax_request(self):
+        expected_redirect = "{0}?next={1}".format(
+            reverse('login'), reverse('edit_contacts'))
+        new_form_data = any_model(Contact, birth_date='2014-12-10', photo='')
+        post_dict = new_form_data.__dict__
+        del post_dict['photo']
+        del post_dict['id']
+        # need to be authenticated
+        response = self.client.post(
+            reverse('edit_contacts'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        self.assertRedirects(
+            response,
+            expected_redirect,
+            status_code=302,
+            target_status_code=200,
+            msg_prefix=''
+        )
+
+        self.client.login(username='admin', password='admin')
+        # with no submitted data
+        response = self.client.post(
+            reverse('edit_contacts'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertIn('application/json', response['Content-Type'])
+        data = json.loads(response.content)
+        self.assertTrue(isinstance(data, dict))
+        self.assertTrue('result' in data)
+        self.assertEquals(data['result'], 'error')
+        self.assertTrue('form_errors' in data)
+
+        response = self.client.post(
+            reverse('edit_contacts'),
+            post_dict,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        self.assertEquals(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue('result' in data)
+        self.assertEquals('success', data['result'])
