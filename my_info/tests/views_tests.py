@@ -166,7 +166,7 @@ class ContactsEditPageTestCase(TestCase):
         self.assertTrue('result' in data)
         self.assertEquals(data['result'], 'error')
         self.assertTrue('form_errors' in data)
-
+        # with data
         response = self.client.post(
             reverse('edit_contacts'),
             post_dict,
