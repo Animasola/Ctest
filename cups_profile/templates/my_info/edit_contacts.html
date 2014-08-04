@@ -3,12 +3,13 @@
 {% block title %}Contacts Edit Page{% endblock %}
 
 {% block extra_js %}
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/edit_contacts_page.js"></script>
 {% endblock %}
 
 {% block body %}
 
-<form id="editmyinfo" enctype="multipart/form-data" action="#" method="POST">
+<form id="editmyinfo" enctype="multipart/form-data" action="{% url edit_contacts %}" method="POST">
   {% csrf_token %}
   <div class="form_left">
     <div class="fieldWrapper" id="idname">

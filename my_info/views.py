@@ -4,9 +4,11 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_GET
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
+import json
 
 from my_info.models import Contact, LoggedRequest
 from my_info.forms import ContactForm
@@ -33,9 +35,23 @@ def edit_contacts(request):
 
     if request.method == 'POST':
         form = ContactForm(request.POST, request.FILES, instance=my_contacts)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('home'))
+        response_dict = {}
+        if request.is_ajax():
+            if form.is_valid():
+                form.save()
+                response_dict['result'] = 'success'
+            else:
+                response_dict['result'] = 'error'
+                errors = {}
+                for error in form.errors:
+                    errors[error] = form.errors[error][0]
+                response_dict['form_errors'] = errors
+            data = json.dumps(response_dict, ensure_ascii=False)
+            return HttpResponse(data, mimetype='application/json')
+        else:
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('home'))
     else:
         form = ContactForm(instance=my_contacts)
 
