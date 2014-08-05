@@ -13,9 +13,6 @@ class MyInfoViewsTests(TestCase):
         self.field_names = Contact._meta.get_all_field_names()
 
     def test_page_content(self):
-        # should be asking to login
-        response = self.client.get(reverse('home'))
-        self.assertEquals(response.status_code, 302)
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('home'))
 
