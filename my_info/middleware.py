@@ -10,10 +10,5 @@ class RequestLogger(object):
                 'request_type': request.method,
                 'url': request.build_absolute_uri(request.path)
             })
-        except:
-            raise Exception(
-                "Error while trying to log %s request: from %s. Url:" % (
-                    request.method,
-                    request.META['REMOTE_ADDR'],
-                    request.build_absolute_uri(request.path))
-            )
+        except Exception, e:
+            raise Exception("Middleware failed to log request:\n" + str(e))
