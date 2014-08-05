@@ -22,7 +22,6 @@ class MyInfoViewsTests(TestCase):
         self.field_names = Contact._meta.get_all_field_names()
 
     def test_page_content(self):
-
         response = self.client.get(reverse('home'))
         # all field values except "id" should be present at the home page
         for field_name in [field for field in self.field_names if field != 'id']:
