@@ -5,5 +5,6 @@ argparse==1.2.1
 django-annoying==0.8.0
 django-any==0.2.0
 django-registration==1.0
+factory-boy==2.4.1
 importlib==1.0.3
 wsgiref==0.1.2

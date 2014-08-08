@@ -2,14 +2,17 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
+
 from StringIO import StringIO
 from datetime import datetime
-
 from PIL import Image
 from django_any import any_model
+import os
 
 from my_info.models import Contact, LoggedRequest
 from my_info.forms import ContactForm
+from my_info.factories import ContactFactory
 
 
 class MyInfoViewsTests(TestCase):
@@ -88,6 +91,7 @@ class ContactsEditPageTestCase(TestCase):
         self.image.save(self.dummy_file, 'png')
         self.dummy_file.name = 'test_%s.png' % datetime.now().microsecond
         self.dummy_file.seek(0)
+        self.test_files = []
         # self.form_data = any_model(Contact, photo="")
         # self.post_data = self.form_data.__dict__
 
@@ -109,13 +113,13 @@ class ContactsEditPageTestCase(TestCase):
             self.assertContains(response, value, status_code=200)
 
     def test_form(self):
-        new_form_data = any_model(Contact, birth_date='2014-12-10', photo='')
+        # new_form_data = any_model(Co/ntact, birth_date='2014-12-10', photo='')
+        new_form_data = ContactFactory.create()
+        self.test_files.append(os.path.split(
+            settings.DEPLOY_DIR)[0] + new_form_data.photo.url)
         post_dict = new_form_data.__dict__
-        file_dict = {
-            'photo': SimpleUploadedFile(self.dummy_file.name, self.dummy_file.read())
-        }
         form = ContactForm(
-            post_dict, file_dict, instance=self.current_instance)
+            post_dict, instance=self.current_instance)
         self.assertTrue(form.is_valid())
         form.save()
 
@@ -125,10 +129,14 @@ class ContactsEditPageTestCase(TestCase):
             if key == 'birth_date':
                 self.assertContains(
                     response,
-                    value.strftime('%b. %d, %Y'),
+                    value.strftime('%b. %-d, %Y'),
                     status_code=200)
             elif key in ['extra_contacts', 'bio']:
                 self.assertContains(
                     response,
                     value[0],
                     status_code=200)
+
+    def tearDown(self):
+        for file_ in self.test_files:
+            os.remove(file_)
