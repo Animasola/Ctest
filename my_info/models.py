@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 from django.db import models
 from django.conf import settings
+from django.db.utils import DatabaseError
 
 import os
 from PIL import Image
@@ -39,3 +40,31 @@ class LoggedRequest(models.Model):
     def __unicode__(self):
         return "Request: %s From: %s At: %s" % (
             self.request_type, self.ip, self.timestamp)
+
+
+class ModelChangeLog(models.Model):
+    CREATED = 'created'
+    DELETED = 'deleted'
+    ALTERED = 'altered'
+
+    app_label = models.CharField(max_length=255)
+    model_name = models.CharField(max_length=255)
+    action = models.CharField(max_length=7)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def log_record(cls, instance, action):
+        if isinstance(instance, ModelChangeLog):
+            return
+        try:
+            log_record = ModelChangeLog(
+                app_label=instance._meta.app_label,
+                model_name=instance.__class__.__name__,
+                action=action
+            )
+            log_record.save()
+        except DatabaseError:
+            pass
+
+    def __unicode__(self):
+        return "%s:%s - %s" % (self.app_label, self.model_name, self.action)
