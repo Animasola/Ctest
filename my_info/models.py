@@ -1,7 +1,8 @@
 #-*- coding:utf-8 -*-
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.db.utils import DatabaseError
+from django.db.models.signals import post_save, post_delete
 
 import os
 from PIL import Image
@@ -68,3 +69,18 @@ class ModelChangeLog(models.Model):
 
     def __unicode__(self):
         return "%s:%s - %s" % (self.app_label, self.model_name, self.action)
+
+
+def log_create_alter(sender, instance, created, **kwargs):
+    ModelChangeLog.log_record(
+        instance,
+        ModelChangeLog.CREATED if created else ModelChangeLog.ALTERED
+    )
+
+
+def log_deleted(sender, instance, **kwargs):
+    ModelChangeLog.log_record(instance, ModelChangeLog.DELETED)
+
+
+post_save.connect(log_create_alter, dispatch_uid='log_create_alter')
+post_delete.connect(log_deleted, dispatch_uid='log_deleted')
