@@ -37,6 +37,7 @@ class LoggedRequest(models.Model):
     ip = models.CharField(max_length=20)
     request_type = models.CharField(max_length=4)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
+    priority = models.IntegerField(default=0)
 
     def __unicode__(self):
         return "Request: %s From: %s At: %s" % (
