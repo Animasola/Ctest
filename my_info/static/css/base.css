@@ -118,3 +118,7 @@ form p{
 #form_butts {
     float:left;
 }
+
+a.selected-sorting {
+    text-shadow: 0 0 5px #194fb2;
+}

@@ -14,6 +14,14 @@ from my_info.models import Contact, LoggedRequest
 from my_info.forms import ContactForm
 
 
+SORTING = {
+    'timestamp': "Timestamp ASC",
+    '-timestamp': "Timestamp DESC",
+    'priority': "Priority ASC",
+    '-priority': "Priority DESC"
+}
+
+
 @require_GET
 @render_to('my_info/home.html')
 def info_page(request):
@@ -24,8 +32,15 @@ def info_page(request):
 @require_GET
 @render_to('my_info/requests.html')
 def logged_requests_page(request):
-    requests = LoggedRequest.objects.all().order_by('timestamp')[: 10]
-    return {'requests': requests}
+
+    queryset = LoggedRequest.objects.all()
+    ordering = 'timestamp'
+
+    if 'ordering' in request.GET and request.GET['ordering']:
+        ordering = request.GET['ordering']
+    requests = queryset.order_by(ordering)[: 10]
+
+    return {'requests': requests, 'sorting': SORTING, 'active': ordering}
 
 
 @login_required

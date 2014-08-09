@@ -41,5 +41,5 @@
 
 {% endblock %}
 {% block panel %}
-  <a href="{% url logged_requests_page %}">Requests</a>
+  <a href="{% url logged_requests_page %}?ordering=-priority">Requests</a>
 {% endblock %}

@@ -4,11 +4,21 @@
 
 {% block body %}
 
+<h5>Sorting:</h5>
+
+
+<p>
+{% for key, value in sorting.items %}
+    <a class="{% if key == active %}selected-sorting{% endif %}" href="{% url logged_requests_page %}?ordering={{ key }}">{{ value }}</a>
+{% endfor %}
+</p>
+
 <table class="requests-table">
     <thead>
         <th>Type</th>
         <th>Requested Url</th>
         <th>From IP</th>
+        <th>Priority</th>
         <th>Timestamp</th>
     </thead>
     <tbody>
@@ -17,6 +27,7 @@
             <td>{{ request.request_type }}</td>
             <td>{{ request.url }}</td>
             <td>{{ request.ip }}</td>
+            <td> {{ request.priority }}</td>
             <td>{{ request.timestamp }}</td>
         </tr>
         {% endfor %}
