@@ -1,17 +1,15 @@
 #-*- coding:utf-8 -*-
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-import json
 from django.conf import settings
+import json
 
 from StringIO import StringIO
 from datetime import datetime
 from PIL import Image
-from django_any import any_model
 import os
 
 from my_info.models import Contact, LoggedRequest
-from my_info.forms import ContactForm
 from my_info.factories import ContactFactory
 
 
@@ -21,6 +19,7 @@ class MyInfoViewsTests(TestCase):
     def setUp(self):
         self.my_contacts = Contact.objects.all()[0]
         self.field_names = Contact._meta.get_all_field_names()
+        self.test_files = []
 
     def test_page_content(self):
         response = self.client.get(reverse('home'))
@@ -143,8 +142,6 @@ class ContactsEditPageTestCase(TestCase):
         self.dummy_file.name = 'test_%s.png' % datetime.now().microsecond
         self.dummy_file.seek(0)
         self.test_files = []
-        # self.form_data = any_model(Contact, photo="")
-        # self.post_data = self.form_data.__dict__
 
     def test_get(self):
         # need to be authenticated
@@ -163,38 +160,17 @@ class ContactsEditPageTestCase(TestCase):
                 continue
             self.assertContains(response, value, status_code=200)
 
-    def test_form(self):
-        # new_form_data = any_model(Co/ntact, birth_date='2014-12-10', photo='')
+    def test_ajax_request(self):
+        expected_redirect = "{0}?next={1}".format(
+            reverse('login'), reverse('edit_contacts'))
+        # new_form_data = any_model(Contact, birth_date='2014-12-10', photo='')
         new_form_data = ContactFactory.create()
         self.test_files.append(os.path.split(
             settings.DEPLOY_DIR)[0] + new_form_data.photo.url)
         post_dict = new_form_data.__dict__
-        form = ContactForm(
-            post_dict, instance=self.current_instance)
-        self.assertTrue(form.is_valid())
-        form.save()
-
-        # data on the main page should be changed now
-        response = self.client.get(reverse('home'))
-        for key, value in post_dict.iteritems():
-            if key == 'birth_date':
-                self.assertContains(
-                    response,
-                    value.strftime('%b. %-d, %Y'),
-                    status_code=200)
-            elif key in ['extra_contacts', 'bio']:
-                self.assertContains(
-                    response,
-                    value[0],
-                    status_code=200)
-
-    def test_ajax_request(self):
-        expected_redirect = "{0}?next={1}".format(
-            reverse('login'), reverse('edit_contacts'))
-        new_form_data = any_model(Contact, birth_date='2014-12-10', photo='')
-        post_dict = new_form_data.__dict__
         del post_dict['photo']
         del post_dict['id']
+        post_dict['birth_date'] = str(post_dict['birth_date'].date())
         # need to be authenticated
         response = self.client.post(
             reverse('edit_contacts'),
@@ -225,6 +201,7 @@ class ContactsEditPageTestCase(TestCase):
             post_dict,
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
+
         self.assertEquals(response.status_code, 200)
         data = json.loads(response.content)
         self.assertTrue('result' in data)
