@@ -2,6 +2,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 import json
+from django.conf import settings
 
 from StringIO import StringIO
 from datetime import datetime
@@ -10,6 +11,8 @@ from django_any import any_model
 import os
 
 from my_info.models import Contact, LoggedRequest
+from my_info.forms import ContactForm
+from my_info.factories import ContactFactory
 
 
 class MyInfoViewsTests(TestCase):
@@ -160,6 +163,31 @@ class ContactsEditPageTestCase(TestCase):
                 continue
             self.assertContains(response, value, status_code=200)
 
+    def test_form(self):
+        # new_form_data = any_model(Co/ntact, birth_date='2014-12-10', photo='')
+        new_form_data = ContactFactory.create()
+        self.test_files.append(os.path.split(
+            settings.DEPLOY_DIR)[0] + new_form_data.photo.url)
+        post_dict = new_form_data.__dict__
+        form = ContactForm(
+            post_dict, instance=self.current_instance)
+        self.assertTrue(form.is_valid())
+        form.save()
+
+        # data on the main page should be changed now
+        response = self.client.get(reverse('home'))
+        for key, value in post_dict.iteritems():
+            if key == 'birth_date':
+                self.assertContains(
+                    response,
+                    value.strftime('%b. %-d, %Y'),
+                    status_code=200)
+            elif key in ['extra_contacts', 'bio']:
+                self.assertContains(
+                    response,
+                    value[0],
+                    status_code=200)
+
     def test_ajax_request(self):
         expected_redirect = "{0}?next={1}".format(
             reverse('login'), reverse('edit_contacts'))
@@ -201,3 +229,7 @@ class ContactsEditPageTestCase(TestCase):
         data = json.loads(response.content)
         self.assertTrue('result' in data)
         self.assertEquals('success', data['result'])
+
+    def tearDown(self):
+        for file_ in self.test_files:
+            os.remove(file_)
