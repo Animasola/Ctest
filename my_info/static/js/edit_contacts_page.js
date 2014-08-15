@@ -40,8 +40,10 @@ jQuery(function ($) {
                 dataType: 'json',
                 success: myinfo.edit_contacts.submit_response_func
             };
+            myinfo.edit_contacts.$message.removeClass("success alert")
             $(this).ajaxSubmit(ajax_options)
             myinfo.edit_contacts.$form_elems.prop("disabled", true)
+            myinfo.edit_contacts.$message.toggleClass("warning")
             myinfo.edit_contacts.$message.text("Loading data, it may take a few moments...").fadeIn("slow");
             return false;
         },
@@ -51,17 +53,21 @@ jQuery(function ($) {
                 errors = {};
 
             myinfo.edit_contacts.$form_elems.prop("disabled", false)
-            $('.error').remove()
+            myinfo.edit_contacts.$message.toggleClass("warning")
+            $('small.error').remove()
+            $('div.error').removeClass('error')
             myinfo.edit_contacts.$message.fadeOut('slow');
             if (data['result'] == 'success') {
                 e_msg = "Contacts successfully updated! "
+                myinfo.edit_contacts.$message.addClass("success")
             } else if (data['result'] == 'error') {
                 errors = data['form_errors']
                 e_msg = "Contact form contains some errors, fix it before saveing."
+                myinfo.edit_contacts.$message.addClass("alert")
                 for (var error in errors) {
                     myinfo.edit_contacts.$edit_contacts_form
-                    .find('textarea[name=' + error + '], input[name=' + error + ']')
-                    .after('<div class="error" style="color:#ff0000"; float:right;>' + errors[error] + '</div>');
+                    .find('div[id=' + error + ']').addClass("error")
+                    .after('<small class="error" >' + errors[error] + '</small>');
                 }
             }
             myinfo.edit_contacts.$message.text( e_msg ).fadeIn("slow");

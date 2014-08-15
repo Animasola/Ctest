@@ -3,43 +3,48 @@
 
 {% block title %}Contacts{% endblock %}
 {% block body %}
-<div class="login">
-  <p>{% if user.is_authenticated %}
-      <a href="{% url logout %}">Logout</a> <a href="{% url edit_contacts %}">Edit</a> <a href="{% edit_link contacts %}">(admin)</a>
-{% else %}
-<a href="{% url login %}">Login</a>{% endif %}
-</div>
+
+<ul class="breadcrumbs">
+  {% if user.is_authenticated %}
+  <li><a href="{% url edit_contacts %}">Edit</a></li>
+  <li><a href="{% edit_link contacts %}">(admin)</a></li>
+  <li><a href="{% url logout %}">Logout</a></li>
+  {% else %}
+  <li><a href="{% url login %}">Login</a>{% endif %}</li>
+</ul>
 
 
-<div class="my-data">
-  <div class="left-side">
-    <p>Name: {{ contacts.first_name }}</p>
-    <p>Last name: {{ contacts.last_name }}</p>
-    <p>Date of Birth: {{ contacts.birth_date }}</p>
-    <p>Photo:<br>
-      <img id="my_photo_prev" src="{% if contacts.photo %}{{ MEDIA_URL }}{{ contacts.photo }}{% else %}http://placehold.it/380x500{% endif %}">
+<div class="row panel radius">
+
+  <div class="large-5 columns">
+    <p class="row" >Name: {{ contacts.first_name }}</p>
+    <p class="row" >Last name: {{ contacts.last_name }}</p>
+    <p class="row" >Date of Birth: {{ contacts.birth_date }}</p>
+    <p class="row">Photo:<br>
+      <img class="th" id="my_photo_prev" src="{% if contacts.photo %}{{ MEDIA_URL }}{{ contacts.photo }}{% else %}http://placehold.it/380x500{% endif %}">
     </p>
   </div>
-  <div class="right-side">
-    <p>Contacts</p>
-    <p>Email: {{ contacts.email }}</p>
-    <p>Jabber: {{ contacts.jabber }}</p>
-    <p>Skype: {{ contacts.skype }}</p>
-    <p>Other contacts:<br>
+  <div class="large-5 columns">
+    <p class="row" >Contacts</p>
+    <p class="row" >Email: {{ contacts.email }}</p>
+    <p class="row">Jabber: {{ contacts.jabber }}</p>
+    <p class="row" >Skype: {{ contacts.skype }}</p>
+    <p class="row" >Other contacts:
     <div class="multiline">
         {{ contacts.extra_contacts }}
     </div>
     </p>
-<p>
-    Bio:<br>
+<p class="row">
+    Bio:
     <div class="multiline">
         {{ contacts.bio }}
     </div>
 </p>
     </div>
+
 </div>
 
 {% endblock %}
 {% block panel %}
-  <a href="{% url logged_requests_page %}?ordering=-priority">Requests</a>
+  <li><a href="{% url logged_requests_page %}?ordering=-priority">Requests</a></li>
 {% endblock %}

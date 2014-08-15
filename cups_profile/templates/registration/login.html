@@ -1,31 +1,32 @@
 {% extends "base.html" %}
 
 {% block head %}
-  <title>Login to edit information</title>
+  {% block title %}Login to edit information{% endblock %}
 {% endblock %}
 {% block body %}
-  <header>
-    <h2>Login page</h2>
-  </header>
-  <section>
+
+  <div class="row panel">
     {% if form.errors %}
-      <p>Your login or password is incorrect</p>
+      <p class="error">Your login or password is incorrect</p>
     {% endif %}
-    <form class="login" method="post" action=".">{% csrf_token %}
-      <p>
-        <label for="id_username">Username:</label>
+     <h4 class="small-8 small-centered columns">Login page</h4>
+    <form method="post" action=".">{% csrf_token %}
+      <div class="large-8 columns large-centered">
+        <label class="label" for="id_username">Username:</label>
         {{ form.username }}
-      </p>
-      <p>
-        <label for="id_password">Password:</label>
+      </div>
+      <div class="large-8 columns large-centered">
+        <label class="label" for="id_password">Password:</label>
         {{ form.password }}
-      </p>
+      </div>
       {% if next %}
         <input type="hidden" name="next" value="{{ next }}" />
       {% else %}
         <input type="hidden" name="next" value="{% url home %}" />
       {% endif %}
-      <br/><input type="submit" value="login" />
+      <div class="small-8 columns small-centered">
+        <input class="button success" type="submit" value="login" />
+      </div>
     </form>
-  </section>
+  </div>
 {% endblock %}

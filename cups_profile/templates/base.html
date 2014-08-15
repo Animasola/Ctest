@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/foundation.css" />
     <title>
         {% block title %}
         {% endblock %}
@@ -16,17 +17,18 @@
     <script type="text/javascript">
         window.myinfo = {};
     </script>
+    <script src="{{ STATIC_URL }}js/vendor/modernizr.js"></script>
     {% block extra_js %}
     {% endblock %}
   </head>
   <body>
-  <h1 class="page-header">42 Coffee Cups Test Assignment</h1>
+    <div class="row">
+        <h1 class="text-left">42 Coffee Cups Test Assignment</h1>
+    </div>
   {% block body %}
   {% endblock %}
-    <div class="clr"></div>
-    <div id="reqlog">
-    <hr/>
+    <ul class="breadcrumbs">
         {% block panel %}{% endblock %}
-    </div>
+    </ul>
   </body>
 </html>

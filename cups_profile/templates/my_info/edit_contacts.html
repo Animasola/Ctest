@@ -14,54 +14,57 @@
 {% block body %}
 
 <form id="editmyinfo" enctype="multipart/form-data" action="{% url edit_contacts %}" method="POST">
-  {% csrf_token %}
-  <div class="form_left">
-    <div class="fieldWrapper" id="idname">
-      {{ form.first_name.label_tag }} {{ form.first_name }}
-      {{ form.first_name.errors }}
+  <div class="row panel radius">
+    {% csrf_token %}
+    <div class="large-5 columns">
+      <div id="name">
+        <label>{{ form.first_name.label}}: {{ form.first_name }}</label>
+      </div>
+      <div id="surname">
+        <label>{{ form.last_name.label }}: {{ form.last_name }}</label>
+      </div>
+      <div id="birth_date">
+        <label>{{ form.birth_date.label }}: {{ form.birth_date }}</label>
+      </div>
+      <div id="my_photo">
+        <label>{{ form.photo.label }}:</label>
+        {{ form.photo }}
+      </div>
+      <div class="clr"></div>
+      <div class="th" id="img_container"><img id="img_prev" src="{% if photo %}{{MEDIA_URL}}{{ photo }}{% else %}http://placehold.it/380x500{% endif %}" alt="Image preview" /></div>
     </div>
-    <div class="fieldWrapper" id="idsurname">
-      {{ form.last_name.label_tag }} {{ form.last_name }}
-      {{ form.last_name.errors }}
-    </div>
-    <div class="fieldWrapper" id="idbirth_date">
-      {{ form.birth_date.label_tag }} {{ form.birth_date }}
-      {{ form.birth_date.errors }}
-    </div>
-    <div class="fieldWrapper" id="idmy_photo">
-      {{ form.photo.label_tag }}
-      {{ form.photo }}
-      {{ form.photo.errors }}
-    </div>
-    <div class="clr"></div>
-    <div id="img_container"><img id="img_prev" src="{% if photo %}{{MEDIA_URL}}{{ photo }}{% else %}http://placehold.it/380x500{% endif %}" alt="Image preview" /></div>
-  </div>
-  <div class="form_right">
-    <div class="fieldwrapper" id="idemail">
-      {{ form.email.label_tag }} {{ form.email }}
-      {{ form.email.errors }}
-    </div>
-    <div class="fieldWrapper" id="idjabber">
-      {{ form.jabber.label_tag }} {{ form.jabber }}
-      {{ form.jabber.errors }}
-    </div>
-    <div class="fieldWrapper" id="idskype">
-      {{ form.skype.label_tag }} {{ form.skype }}
-      {{ form.skype.errors }}
-    </div>
-    <div class="fieldWrapper" id="idother_cont">
-      {{ form.extra_contacts.label_tag }}<br/> {{ form.extra_contacts }}
-      {{ form.extra_contacts.errors }}
-    </div>
-    <div class="fieldWrappe" id="idbio">
-      {{ form.bio.label_tag }}<br/> {{ form.bio }}
-      {{ form.bio.errors }}
+
+    <div class="large-5 columns">
+      <div id="email">
+        <label>{{ form.email.label }}: {{ form.email }}</label>
+      </div>
+      <div id="jabber">
+        <label>{{ form.jabber.label }}: {{ form.jabber }}</label>
+      </div>
+      <div id="skype">
+        <label>{{ form.skype.label }}: {{ form.skype }}</label>
+      </div>
+      <div id="other_cont">
+        <label>{{ form.extra_contacts.label }}:<br/> {{ form.extra_contacts }}</label>
+      </div>
+      <div id="bio">
+        <label>{{ form.bio.label }}:<br/> {{ form.bio }}</label>
+      </div>
     </div>
   </div>
 
-  <div class="clr"></div>
-    <div id="error_message">Fill the form and press Submit button</div>
-    <p id="form_butts"><button id="savebutton" type="submit">Submit</button> <a href="{% url home %}">cancel</a></p>
+  <div class="row panel radius">
+  <div class="large-5 columns">
+
+    <ul class="button-group">
+      <li><button class="button" id="savebutton" type="submit">Submit</button></li>
+      <li class="button alert"><a href="{% url home %}">Cancel</a></li>
+    </ul>
+  </div>
+  <div class="large-5 columns">
+    <label class="label text-large" id="error_message">Fill the form and press Submit button</label>
+  </div>
+  </div>
 </form>
 
 {% endblock %}
