@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 
-from annoying.decorators import render_to
+from annoying.decorators import render_to, ajax_request
 from annoying.functions import get_object_or_None
 import json
 
@@ -71,3 +71,28 @@ def edit_contacts(request):
         form = ContactForm(instance=my_contacts)
 
     return {'form': form, 'photo': my_contacts.photo}
+
+
+@ajax_request
+def inline_contacts_edit(request):
+    if not request.is_ajax():
+        response = HttpResponse('Ajax Required')
+        response.status_code = 400
+        return response
+    response = {'result': 'success'}
+    fields, contacts_id = None, request.POST.get('instance_id', None)
+
+    if 'fields' in request.POST and request.POST['fields']:
+        fields = json.loads(request.POST['fields'])
+
+    if fields and contacts_id:
+        try:
+            Contact.objects.filter(id=contacts_id).update(**fields)
+        except Exception as e:
+            response['result'] = 'error'
+            response['msg'] = str(e)
+    elif not fields and contacts_id:
+        response['result'] = 'empty'
+        response['msg'] = "Nothing to update..."
+
+    return response

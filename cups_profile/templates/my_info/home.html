@@ -10,8 +10,10 @@
 
 {% block extra_js %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/in-line_edit.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
 <script type="text/javascript">
     window.myinfo['instance_id'] = {{ contacts.id }};
+    window.myinfo['inline_edit_url'] = {% url inline_contacts_edit %}
 </script>
 {% endblock %}
 
@@ -27,6 +29,12 @@
   {% endif %}
 </ul>
 
+<div class="row">
+  <div data-alert class="alert-box success radius" style="display:none;">
+  <div class="js-alert-text"></div>
+    <a href="#" class="close">&times;</a>
+  </div>
+</div>
 
 <div class="row panel">
     <div class="large-6 columns">
@@ -50,8 +58,8 @@
     </div>
 </div>
 
-
 </div>
+
 
 {% endblock %}
 {% block panel %}
