@@ -10,7 +10,7 @@
 
 {% block extra_js %}
 
-  <script type="text/javascript" src="{{ STATIC_URL }}js/in-line_edit.js"></script>
+  {% if user.is_superuser  %}<script type="text/javascript" src="{{ STATIC_URL }}js/in-line_edit.js"></script>{% endif %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
   <script src="http://malsup.github.com/jquery.form.js"></script>
   <script type="text/javascript">
@@ -43,7 +43,7 @@
     <p class="large-4 columns"><label> Last Name: </label><div id="last_name" class="field">{{ contacts.last_name }}</div></p>
     <p class="large-4 columns"><label>Date of Birth:</label><div id="birth_date" class="field">{{ contacts.birth_date|date:"Y-m-d" }}</div><input type="hidden" value="{{ contacts.birth_date }}" /></p>
     <form id="photo-change-form" enctype="multipart/form-data" action="{% url inline_contacts_edit %}" method="POST"><div class="large-10 columns">{% csrf_token %}
-    <small><a class="showme" id="js-select-photo" href="#">Change Photo..</a></small>
+    {% if user.is_superuser %}<small><a class="showme" id="js-select-photo" href="#">Change Photo..</a></small>{% else %}<label>Photo:</label>{% endif %}
       <div id="js-photo-controls" style="display:none;">
         <input type="file" name="photo" id="id_photo" />
       </div>
