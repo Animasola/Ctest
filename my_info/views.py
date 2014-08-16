@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -74,16 +74,23 @@ def edit_contacts(request):
 
 
 @ajax_request
+@require_POST
 def inline_contacts_edit(request):
     if not request.is_ajax():
         response = HttpResponse('Ajax Required')
         response.status_code = 400
         return response
+
+    contact = get_object_or_404(Contact, id=1)
+
     response = {'result': 'success'}
     fields, contacts_id = None, request.POST.get('instance_id', None)
+    new_photo = None
 
     if 'fields' in request.POST and request.POST['fields']:
         fields = json.loads(request.POST['fields'])
+    if 'photo' in request.FILES and request.FILES['photo']:
+        new_photo = request.FILES['photo']
 
     if fields and contacts_id:
         try:
@@ -94,5 +101,12 @@ def inline_contacts_edit(request):
     elif not fields and contacts_id:
         response['result'] = 'empty'
         response['msg'] = "Nothing to update..."
+    if new_photo:
+        try:
+            contact.photo = new_photo
+            contact.save()
+        except Exception as e:
+            response['result'] = 'error'
+            response['msg'] = str(e)
 
     return response

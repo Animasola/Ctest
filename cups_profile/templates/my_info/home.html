@@ -9,16 +9,17 @@
 
 
 {% block extra_js %}
+
   <script type="text/javascript" src="{{ STATIC_URL }}js/in-line_edit.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
-<script type="text/javascript">
-    window.myinfo['instance_id'] = {{ contacts.id }};
-    window.myinfo['inline_edit_url'] = {% url inline_contacts_edit %}
-</script>
+  <script src="http://malsup.github.com/jquery.form.js"></script>
+  <script type="text/javascript">
+      window.myinfo['instance_id'] = {{ contacts.id }};
+      window.myinfo['inline_edit_url'] = {% url inline_contacts_edit %}
+  </script>
 {% endblock %}
 
 {% block body %}
-
 <ul class="breadcrumbs">
   {% if user.is_authenticated %}
     <li><a href="{% url edit_contacts %}">Edit</a></li>
@@ -31,7 +32,7 @@
 
 <div class="row">
   <div data-alert class="alert-box success radius" style="display:none;">
-  <div class="js-alert-text"></div>
+    <div class="js-alert-text"></div>
     <a href="#" class="close">&times;</a>
   </div>
 </div>
@@ -40,21 +41,26 @@
     <div class="large-6 columns">
     <p class="large-4 columns"> <label> Name: </label><div id="first_name" class="field">{{ contacts.first_name }}</div></p>
     <p class="large-4 columns"><label> Last Name: </label><div id="last_name" class="field">{{ contacts.last_name }}</div></p>
-    <p class="large-4 columns"><label>Date of Birth:</label><div id="birth_date" class="field">{{ contacts.birth_date|date:"Y-m-d" }}</div></p>
-    <p class="large-10 columns"><label>Photo:</label></p>
-      <img id="photo" class="th" src="{% if contacts.photo %}{{ MEDIA_URL }}{{ contacts.photo }}{% else %}http://placehold.it/380x500{% endif %}">
+    <p class="large-4 columns"><label>Date of Birth:</label><div id="birth_date" class="field">{{ contacts.birth_date|date:"Y-m-d" }}</div><input type="hidden" value="{{ contacts.birth_date }}" /></p>
+    <form id="photo-change-form" enctype="multipart/form-data" action="{% url inline_contacts_edit %}" method="POST"><div class="large-10 columns">{% csrf_token %}
+    <small><a class="showme" id="js-select-photo" href="#">Change Photo..</a></small>
+      <div id="js-photo-controls" style="display:none;">
+        <input type="file" name="photo" id="id_photo" />
+      </div>
+    </div></form>
+      <img id="photo-frame" class="th" src="{% if contacts.photo %}{{ MEDIA_URL }}{{ contacts.photo }}{% else %}http://placehold.it/380x500{% endif %}">
     </div>
 
 
     <div class="large-6 columns">
       <p class="large-4 columns"><label>Email: </label><div id="email" class="field">{{ contacts.email }}</div></p>
-      <p class="large-4 columns"><label>Jabber:</label> <div id="jabber"class="field">{{ contacts.jabber }}</div></p>
+      <p class="large-4 columns"><label>Jabber:</label> <div id="jabber" class="field">{{ contacts.jabber }}</div></p>
       <p class="large-4 columns"><label>Skype:</label> <div id="skype" class="field">{{ contacts.skype }}</div></p>
 
       <p class="large-4 columns"><label> Extra Contacts:</label>
-      <div id="extra_contacts" class="multiline field">{{ contacts.extra_contacts }}</div></p>
+      <div id="extra_contacts" class="multiline field" style="max-width:70%; overflow:auto;">{{ contacts.extra_contacts }}</div></p>
       <p class="large-4 columns"><label> Bio:</label>
-      <div id="bio" class="multiline field">{{ contacts.bio }}</div></p>
+      <div id="bio" class="multiline field" style="max-width:70%; overflow:auto;">{{ contacts.bio }}</div></p>
     </div>
 </div>
 
